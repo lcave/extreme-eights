@@ -1,12 +1,8 @@
-// Entry point for the build script in your package.json
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-
-const App = () => {
-  return (<div>Hello, Rails 7!</div>)
-}
+import React from 'react'
+import ReactDOM from 'react-dom'
+import RootApp from './components/RootApp'
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('app-mount-point')
-  ReactDOM.render(<div>test</div>, rootEl)
+  ReactDOM.render(<RootApp/>,rootEl)
 })
