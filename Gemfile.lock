@@ -244,6 +244,7 @@ DEPENDENCIES
   grpc (~> 1.42.0)
   jbuilder
   jsbundling-rails
+  jwt
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.1)
