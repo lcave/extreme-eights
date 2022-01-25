@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
 
 export default function ActionableInput({
   inputLabel,
   buttonLabel,
-  value = null,
+  value = "",
   disabled = false,
   onClickCallback,
 }) {
+  const [inputValue, setInputValue] = useState(value);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleClick = () => {
+    onClickCallback(inputValue);
+  };
+
   return (
     <div className="d-flex">
       <FloatingLabel controlId="floatingInput" label={inputLabel}>
@@ -15,7 +25,8 @@ export default function ActionableInput({
           type="text"
           className="rounded-0 rounded-start"
           disabled={disabled}
-          value={value}
+          defaultValue={inputValue}
+          onChange={handleInputChange}
           placeholder={inputLabel}
         />
       </FloatingLabel>
@@ -23,7 +34,7 @@ export default function ActionableInput({
         variant="success"
         style={{ zIndex: 1000 }}
         className="rounded-0 rounded-end"
-        onClick={onClickCallback()}
+        onClick={handleClick}
       >
         {buttonLabel}
       </Button>

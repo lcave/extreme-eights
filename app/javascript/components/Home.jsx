@@ -13,13 +13,19 @@ export default function Home() {
     });
   };
 
+  const handleJoinLobby = (lobbyId) => {
+    navigate(`/lobbies/${lobbyId}`);
+  };
+
   return (
     <div>
-      <Form className="d-flex align-items">
+      <Form className="d-flex align-items" onSubmit={handleJoinLobby}>
         <ActionableInput
           inputLabel={"Lobby ID"}
           buttonLabel="Join"
-          onClickCallback={() => {}}
+          onClickCallback={(lobbyId) => {
+            handleJoinLobby(lobbyId);
+          }}
         />
       </Form>
 
