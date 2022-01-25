@@ -17,7 +17,10 @@ module Lobbies
           friendly_id: friendly_id,
         )
 
-        creator.update!(lobby_id: lobby.id)
+        LobbyAccess.create!(
+          player: creator,
+          lobby: lobby,
+        )
 
         lobby
       end

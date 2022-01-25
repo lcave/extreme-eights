@@ -5,9 +5,16 @@ module Lobbies
 
       return lobby if lobby.players.include?(player)
 
-      player.update!(lobby_id: lobby.id)
+      LobbyAccess.create!(
+        player: player,
+        lobby: lobby,
+      )
 
       lobby
+    end
+
+    def self.my_lobbies(player)
+      Lobby.joins(:lobby_accesses).where(lobby_accesses: { player_id: player.id })
     end
   end
 end

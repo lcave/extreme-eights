@@ -7,7 +7,7 @@ export default function AuthenticatedApp() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/lobbies/:lobbyId" element={<Lobby></Lobby>} />
+      <Route path="/lobbies/:lobbyId" element={<Lobby />} />
     </Routes>
   );
 }

@@ -1,6 +1,8 @@
 module Lobbies
-  class Lobby < ActiveRecord::Base
-    has_many :players, class_name: "Players::Player"
+  class Lobby < ApplicationRecord
+    has_many :lobby_accesses, class_name: "Lobbies::LobbyAccess"
+    has_many :players, through: :lobby_accesses
+
     belongs_to :lobby_leader, class_name: "Players::Player"
 
     validates :lobby_leader_id, presence: true
