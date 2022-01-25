@@ -8,6 +8,7 @@ module Api
         render json: {
           player: {
             name: player.name,
+            id: player.id,
             token: Players::Authenticator.issue_token(player),
           },
         }, status: :created

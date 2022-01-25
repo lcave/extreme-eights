@@ -28,6 +28,9 @@ gem 'jbuilder'
 # authenticate users
 gem 'jwt'
 
+# generate random words for friendly ids
+gem 'spicy-proton'
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 

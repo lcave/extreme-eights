@@ -1,25 +1,31 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import CreatePlayer from './Authentication/CreatePlayer'
-import { currentPlayer, setCurrentPlayer } from './Authentication/currentPlayer'
+import React, { useEffect, useState } from "react";
+import CreatePlayer from "./Authentication/CreatePlayer";
+import {
+  currentPlayer,
+  setCurrentPlayer,
+} from "./Authentication/currentPlayer";
+import { BrowserRouter } from "react-router-dom";
+import AuthenticatedApp from "./AuthenticatedApp";
+import "bootstrap/dist/css/bootstrap.css";
 
 export default function RootApp() {
-  const [player, setPlayer] = useState(null)
+  const [player, setPlayer] = useState(null);
 
   const handlePlayerCreation = (player) => {
-    setCurrentPlayer(player)
-    setPlayer(currentPlayer)
-  }
+    setCurrentPlayer(player);
+    setPlayer(currentPlayer);
+  };
 
   useEffect(() => {
-    setPlayer(currentPlayer)
-  }, [])
+    setPlayer(currentPlayer);
+  }, []);
 
-  if(player){
-    return ( player.name)
-  } else {
-    return (
-      <CreatePlayer createPlayerCallback={handlePlayerCreation}/>
-    )
-  }
+  const content = () => {
+    if (player) {
+      return <AuthenticatedApp />;
+    }
+    return <CreatePlayer createPlayerCallback={handlePlayerCreation} />;
+  };
+
+  return <BrowserRouter>{content()}</BrowserRouter>;
 }

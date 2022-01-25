@@ -1,11 +1,12 @@
-export const currentPlayer = () => JSON.parse(localStorage.getItem("currentPlayer"))
+export const currentPlayer = () =>
+  JSON.parse(localStorage.getItem("currentPlayer"));
 
 export const setCurrentPlayer = (player) => {
-  localStorage.setItem('currentPlayer', JSON.stringify(player))
+  localStorage.setItem("currentPlayer", JSON.stringify(player));
 
-  console.log(`${currentPlayer.name} logged in!`)
-}
+  console.log(`${currentPlayer.name} logged in!`);
+};
 
 export const isloggedIn = () => {
-  return currentPlayer.token !== null
-}
+  return currentPlayer.token !== null;
+};
