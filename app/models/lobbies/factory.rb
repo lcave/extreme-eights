@@ -7,13 +7,13 @@ module Lobbies
       friendly_id = nil
       until valid_id
         friendly_id = Spicy::Proton.format("%a-%a-%n")
-        valid_id = true unless Lobby.find_by(friendly_id: friendly_id)
+        valid_id = true unless Lobby.find_by(id: friendly_id)
       end
 
       ActiveRecord::Base.transaction do
         lobby = Lobby.create!(
           lobby_leader_id: creator.id,
-          friendly_id: friendly_id,
+          id: friendly_id,
         )
 
         creator.update!(lobby_id: lobby.id)

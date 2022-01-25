@@ -1,8 +1,8 @@
 import axios from "axios";
-import { currentPlayer } from "./currentPlayer";
+import { currentPlayerToken } from "./currentPlayer";
 
 axios.interceptors.request.use(function (config) {
-  config.headers = { Authentication: currentPlayer().token };
+  config.headers = { Authentication: currentPlayerToken() };
   return config;
 });
 

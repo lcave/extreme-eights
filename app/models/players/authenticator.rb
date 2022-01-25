@@ -10,6 +10,8 @@ module Players
 
     def self.find_player_by_token(token)
       Player.find_by(id: JWT.decode(token, JWT_SECRET, "HS256"))
+    rescue JWT::DecodeError
+      raise InvalidTokenError
     end
 
     def self.verify_token(token)
