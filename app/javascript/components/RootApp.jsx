@@ -6,6 +6,7 @@ import {
 } from "./Authentication/currentPlayer";
 import { BrowserRouter } from "react-router-dom";
 import AuthenticatedApp from "./AuthenticatedApp";
+import "./Layout/Icons";
 import "bootstrap";
 import styled from "styled-components";
 import eight from "./eight.png";

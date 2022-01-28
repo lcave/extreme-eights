@@ -2,6 +2,9 @@
   "name": "app",
   "private": "true",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
     "@rails/actioncable": "^7.0.1",
     "axios": "^0.25.0",
     "bootstrap": "^5.1.3",

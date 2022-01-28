@@ -9,14 +9,15 @@ const theme = {
     emeraldGreen: "#2ecc71",
     lightBlue: "#3498db",
     onyx: "#36313D",
+    basalt: "#646366",
     obsidian: "#2c3e50",
     purple: "#9b59b6",
   },
   fonts: ["sans-serif", "Roboto"],
   fontSizes: {
-    small: "1em",
-    medium: "2em",
-    large: "3em",
+    small: "1.2em",
+    medium: "1.6em",
+    large: "2em",
   },
 };
 
