@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "./Authentication/api";
 import ActionableInput from "./Forms/ActionableInput";
+import AbsoluteCenteredCard from "./Layout/AbsoluteCenteredCard";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <AbsoluteCenteredCard>
       <Form className="d-flex align-items" onSubmit={handleJoinLobby}>
         <ActionableInput
           inputLabel={"Lobby ID"}
@@ -50,6 +51,6 @@ export default function Home() {
           </li>
         );
       })}
-    </div>
+    </AbsoluteCenteredCard>
   );
 }

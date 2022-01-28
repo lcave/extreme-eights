@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../Authentication/api";
 import ActionableInput from "../Forms/ActionableInput";
+import AbsoluteCenteredCard from "../Layout/AbsoluteCenteredCard";
 
 export default function Lobby() {
   const { lobbyId } = useParams();
@@ -27,7 +28,7 @@ export default function Lobby() {
 
   if (lobby) {
     return (
-      <div>
+      <AbsoluteCenteredCard>
         <h1>{`${lobbyLeader().name}'s Lobby`}</h1>
         <div className="d-flex">
           <ActionableInput
@@ -44,7 +45,7 @@ export default function Lobby() {
             return <li key={player.id}>{player.name}</li>;
           })}
         </ul>
-      </div>
+      </AbsoluteCenteredCard>
     );
   }
   return <></>;

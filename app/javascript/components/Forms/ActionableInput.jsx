@@ -18,6 +18,12 @@ export default function ActionableInput({
     onClickCallback(inputValue);
   };
 
+  const handleKeyUp = (e) => {
+    if (e.key === "Enter") {
+      handleClick();
+    }
+  };
+
   return (
     <div className="d-flex">
       <FloatingLabel controlId="floatingInput" label={inputLabel}>
@@ -27,6 +33,7 @@ export default function ActionableInput({
           disabled={disabled}
           defaultValue={inputValue}
           onChange={handleInputChange}
+          onKeyUp={handleKeyUp}
           placeholder={inputLabel}
         />
       </FloatingLabel>

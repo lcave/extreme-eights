@@ -6,7 +6,19 @@ import {
 } from "./Authentication/currentPlayer";
 import { BrowserRouter } from "react-router-dom";
 import AuthenticatedApp from "./AuthenticatedApp";
-import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap";
+import styled from "styled-components";
+import eight from "./eight.png";
+
+const App = styled.div`
+  padding: 0 3rem;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${(props) => props.theme.colors.lightBlue};
+  background-image: url(${eight});
+  background-size: 35rem;
+  background-position: top;
+`;
 
 export default function RootApp() {
   const [player, setPlayer] = useState(null);
@@ -27,5 +39,9 @@ export default function RootApp() {
     return <CreatePlayer createPlayerCallback={handlePlayerCreation} />;
   };
 
-  return <BrowserRouter>{content()}</BrowserRouter>;
+  return (
+    <App>
+      <BrowserRouter>{content()}</BrowserRouter>
+    </App>
+  );
 }
