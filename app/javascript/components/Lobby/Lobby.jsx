@@ -5,6 +5,9 @@ import ActionableInput from "../Forms/ActionableInput";
 import AbsoluteCenteredCard from "../Layout/AbsoluteCenteredCard";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { createChannel } from "../../channels/utils";
+import { currentPlayerToken } from "../Authentication/currentPlayer";
+import Chatroom from "./Chatroom";
 
 const H2 = styled.h2`
   text-transform: capitalize;
@@ -31,11 +34,55 @@ export default function Lobby() {
     navigator.clipboard.writeText(inviteLink());
   };
 
+  const addMessage = (message) => {
+    const newLobby = Object.assign({}, lobby);
+    newLobby.messages.push(message);
+    setLobby(newLobby);
+  };
+
   useEffect(() => {
-    axios.get(`/api/v1/lobbies/${lobbyId}`).then((response) => {
-      setLobby(response.data.lobby);
+    if (lobby) {
+      const tmpLobby = lobby;
+      const channel = createChannel(
+        {
+          channel: "MessagesChannel",
+          lobby_id: tmpLobby.id,
+        },
+        {
+          received(data) {
+            addMessage(data);
+          },
+        }
+      );
+      tmpLobby.channel = channel;
+      setLobby(tmpLobby);
+    } else {
+      axios.get(`/api/v1/lobbies/${lobbyId}`).then((response) => {
+        const tmplobby = response.data.lobby;
+        setLobby(tmplobby);
+      });
+    }
+  });
+
+  const leaderIcon = (player) => {
+    if (player.id === lobby.lobby_leader_id) {
+      return (
+        <>
+          {" "}
+          - <FontAwesomeIcon icon="crown" />
+        </>
+      );
+    }
+    return "";
+  };
+
+  const sendMessage = (message) => {
+    lobby.channel.send({
+      type: "message",
+      body: message,
+      sent_by: currentPlayerToken(),
     });
-  }, []);
+  };
 
   if (lobby) {
     return (
@@ -59,11 +106,16 @@ export default function Lobby() {
           {lobby.players.map((player) => {
             return (
               <li key={player.id}>
-                {player.name} - <FontAwesomeIcon icon="crown" />
+                {player.name}
+                {leaderIcon(player)}
               </li>
             );
           })}
         </ul>
+        <Chatroom
+          messages={lobby.messages}
+          sendMessageCallback={(message) => sendMessage(message)}
+        />
       </AbsoluteCenteredCard>
     );
   }

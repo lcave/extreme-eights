@@ -18,6 +18,7 @@ module Api
             id: lobby.friendly_id,
             lobby_leader_id: lobby.lobby_leader_id,
             players: lobby.player_names_and_ids,
+            messages: lobby.json_messages,
           },
         }, status: :created
       end

@@ -13,6 +13,8 @@ const AbsoluteCenter = styled.div`
 const MinSizeCard = styled(RoundedCard)`
   min-height: 80%;
   min-width: 800px;
+  display: flex;
+  flex-direction: column;
   @media (max-width: 850px) {
     min-width: unset;
     width: 100%;

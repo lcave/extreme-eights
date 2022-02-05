@@ -10,6 +10,7 @@ const theme = {
     lightBlue: "#3498db",
     onyx: "#36313D",
     basalt: "#646366",
+    lightBasalt: "#b5b4b8",
     obsidian: "#2c3e50",
     purple: "#9b59b6",
   },

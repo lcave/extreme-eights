@@ -6,6 +6,7 @@ export default function ActionableInput({
   buttonLabel,
   value = "",
   disabled = false,
+  clearOnSubmit = false,
   onClickCallback,
 }) {
   const [inputValue, setInputValue] = useState(value);
@@ -15,7 +16,9 @@ export default function ActionableInput({
   };
 
   const handleClick = () => {
-    onClickCallback(inputValue);
+    const value = inputValue;
+    setInputValue("");
+    onClickCallback(value);
   };
 
   const handleKeyUp = (e) => {
@@ -31,7 +34,7 @@ export default function ActionableInput({
           type="text"
           className="rounded-0 rounded-start"
           disabled={disabled}
-          defaultValue={inputValue}
+          value={inputValue}
           onChange={handleInputChange}
           onKeyUp={handleKeyUp}
           placeholder={inputLabel}
