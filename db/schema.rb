@@ -24,17 +24,17 @@ ActiveRecord::Schema.define(version: 2022_02_04_235942) do
     t.index ["friendly_id"], name: "index_lobbies_on_friendly_id", unique: true
   end
 
-  create_table "lobby_accesses", force: :cascade do |t|
+  create_table "lobby_accesses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "player_id"
     t.uuid "lobby_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "messages", force: :cascade do |t|
+  create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "lobby_id"
     t.uuid "player_id"
-    t.string "body"
+    t.string "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
