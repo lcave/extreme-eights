@@ -21,27 +21,19 @@ class GamesChannel < ApplicationCable::Channel
     if type == "ready" && !game.started
       game.set_player_ready(current_player.id)
       if game.all_players_ready?
-        5.times do |i|
+        6.times do |i|
           broadcast_to(
             game,
             {
-              type: "starting_in",
+              type: "game_state",
               starting_in: 5 - i,
+              game_state: game_state(game),
             },
           )
           sleep(1)
         end
 
         game.update!(started: true)
-
-        broadcast_to(
-          game,
-          {
-            type: "game_state",
-            discard: game.discard_pile.top_card,
-            current_player: game.player_hand_objects.first.player_id,
-          },
-        )
       else
         broadcast_to(
           game,
@@ -51,6 +43,14 @@ class GamesChannel < ApplicationCable::Channel
           },
         )
       end
+    else
+      broadcast_to(
+        game,
+        {
+          type: "game_state",
+          game_state: game_state(game),
+        },
+      )
     end
   end
 
@@ -60,5 +60,11 @@ class GamesChannel < ApplicationCable::Channel
 
   private
 
-  def current_player; end
+  def game_state(game)
+    {
+      discard: game.discard_pile.top_card,
+      current_player: game.player_hand_objects.first.player_id,
+      players: game.lobby.player_names_and_ids,
+    }
+  end
 end

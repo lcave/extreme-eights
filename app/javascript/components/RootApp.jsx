@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CreatePlayer from "./Authentication/CreatePlayer";
 import {
-  currentPlayer,
+  getCurrentPlayer,
   setCurrentPlayer,
 } from "./Authentication/currentPlayer";
 import { BrowserRouter } from "react-router-dom";
@@ -26,11 +26,11 @@ export default function RootApp() {
 
   const handlePlayerCreation = (player) => {
     setCurrentPlayer(player);
-    setPlayer(currentPlayer);
+    setPlayer(getCurrentPlayer);
   };
 
   useEffect(() => {
-    setPlayer(currentPlayer);
+    setPlayer(getCurrentPlayer);
   }, []);
 
   const content = () => {

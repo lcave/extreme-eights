@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { createChannel } from "../../channels/utils";
 import { currentPlayerToken } from "../Authentication/currentPlayer";
 import AbsoluteCenteredCard from "../Layout/AbsoluteCenteredCard";
+import ActiveGame from "./ActiveGame";
 
 export default function Game() {
   const { lobbyId } = useParams();
@@ -15,18 +16,10 @@ export default function Game() {
     setGame(tmpGame);
   };
 
-  const setStartingIn = (startingIn) => {
+  const setGameState = (data) => {
     const tmpGame = Object.assign({}, game);
-    tmpGame.waitingFor = null;
-    tmpGame.startingIn = startingIn;
-    setGame(tmpGame);
-  };
-
-  const setGameState = (gameState) => {
-    const tmpGame = Object.assign({}, game);
-    tmpGame.waitingFor = null;
-    tmpGame.startingIn = null;
-    tmpGame.gameState = gameState;
+    tmpGame.startingIn = data.starting_in;
+    tmpGame.gameState = data.game_state;
     setGame(tmpGame);
   };
 
@@ -35,18 +28,14 @@ export default function Game() {
       case "waiting_for":
         setWaitingFor(data.waiting_for);
         break;
-      case "starting_in":
-        setStartingIn(data.starting_in);
-        break;
       case "game_state":
-        setGameState(data.game_state);
+        setGameState(data);
         break;
     }
   };
 
   useEffect(() => {
     if (game && game.channel === undefined) {
-      // connect to game websocket
       const tmpGame = game;
       const channel = createChannel(
         {
@@ -83,11 +72,11 @@ export default function Game() {
           return <span key={name}>{name}</span>;
         });
       }
-      if (game.startingIn) {
+      if (game.startingIn && game.startingIn !== 0) {
         return <span>{game.startingIn}</span>;
       }
       if (game.gameState) {
-        return <span>game started</span>;
+        return <ActiveGame gameState={game.gameState} />;
       }
     }
   };

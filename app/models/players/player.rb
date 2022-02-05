@@ -1,8 +1,11 @@
 module Players
   class Player < ApplicationRecord
-    has_many :lobby_accesses, class_name: "Lobbies::LobbyAccess"
-    has_one :lobby, through: :lobby_accesses
+    belongs_to :lobby, class_name: "Lobbies::Lobby", optional: true
 
     validates :name, presence: true, length: { maximum: 50, minimum: 1 }
+
+    def hand
+      lobby.game.hand_for(id).hand
+    end
   end
 end

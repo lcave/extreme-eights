@@ -15,7 +15,6 @@ module Api
 
         render json: {
           game_id: game.id,
-          discard: game.discard,
         }, status: :created
       end
 
@@ -23,7 +22,6 @@ module Api
         game = lobby.game
         render json: {
           id: game.id,
-          discard: game.discard,
         }, status: :ok
       end
 

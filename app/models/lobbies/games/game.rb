@@ -2,12 +2,12 @@ module Lobbies
   module Games
     class Game < ApplicationRecord
       belongs_to :lobby
-      has_many :players, class_name: "Players::Player", through: :lobby
+      has_many :players, through: :lobby
 
-      validates :players, length: { minimum: 2, maximum: 8 }
+      # validates :players, length: { minimum: 2, maximum: 8 }
 
       def discard_pile
-        Discard.from_array(discard)
+        Discard.from_hash(discard)
       end
 
       def hand_for(player_id)

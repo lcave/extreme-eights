@@ -20,6 +20,7 @@ class MessagesChannel < ApplicationCable::Channel
     broadcast_to(
       lobby,
       {
+        type: "message",
         message: {
           id: message.id,
           body: message.body,

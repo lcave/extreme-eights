@@ -5,12 +5,13 @@ module Lobbies
         @discard = []
       end
 
-      def self.from_array(arr)
+      def self.from_hash(hash)
         discard = new
-        arr.each do |card|
-          binding.pry
-          discard.add_card(Card.new(**card))
+        hash["discard"].each do |card|
+          discard.add_card(Card.new(**card.symbolize_keys))
         end
+
+        discard
       end
 
       def add_card(card)

@@ -8,10 +8,11 @@ const AbsoluteCenter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 const MinSizeCard = styled(RoundedCard)`
-  min-height: 80%;
+  height: 90%;
   min-width: 800px;
   display: flex;
   flex-direction: column;

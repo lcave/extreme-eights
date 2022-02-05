@@ -11,7 +11,8 @@ module Api
       end
 
       def show
-        lobby = Lobbies::Repository.find_or_join(friendly_id: params[:id], player: current_player)
+        lobby = Lobbies::Repository.join(friendly_id: params[:id], player: current_player)
+
         MessagesChannel.broadcast_to(
           lobby,
           {
@@ -32,13 +33,13 @@ module Api
 
       def index
         render json: {
-          available_lobbies: Lobbies::Repository.my_lobbies(current_player).map do |lobby|
+          available_lobbies: [
             {
-              id: lobby.friendly_id,
-              lobby_leader_name: lobby.lobby_leader.name,
-              player_count: lobby.players.count,
-            }
-          end,
+              id: current_player.lobby.friendly_id,
+              lobby_leader_name: current_player.lobby.lobby_leader.name,
+              player_count: current_player.lobby.players.count,
+            },
+          ],
         }, status: :ok
       end
     end

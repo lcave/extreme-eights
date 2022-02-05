@@ -32,9 +32,10 @@ module Lobbies
         WILD
       ].freeze
 
-      attr_accessor :colour, :value
+      attr_accessor :colour, :value, :id
 
-      def initialize(colour:, value:)
+      def initialize(colour:, value:, id: nil)
+        @id = id
         @colour = colour
         @value = value
       end

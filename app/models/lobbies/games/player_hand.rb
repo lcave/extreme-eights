@@ -20,6 +20,7 @@ module Lobbies
       end
 
       def add_card(card)
+        card.id = @hand.size
         @hand << card
       end
     end

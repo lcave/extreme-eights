@@ -1,7 +1,7 @@
 import React from "react";
 import ActionableInput from "../Forms/ActionableInput";
 import styled from "styled-components";
-import { currentPlayer } from "../Authentication/currentPlayer";
+import { getCurrentPlayer } from "../Authentication/currentPlayer";
 
 const Chat = styled.div`
   flex-grow: 2;
@@ -42,7 +42,7 @@ const MessageAuthor = styled.span`
 `;
 
 export default function Chatroom({ messages, sendMessageCallback }) {
-  const player = currentPlayer();
+  const player = getCurrentPlayer();
   const messageAuthor = (message, previousMessage) => {
     if (message.player_id !== previousMessage?.player_id) {
       return (
