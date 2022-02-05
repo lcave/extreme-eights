@@ -6,7 +6,6 @@ export default function ActionableInput({
   buttonLabel,
   value = "",
   disabled = false,
-  clearOnSubmit = false,
   onClickCallback,
 }) {
   const [inputValue, setInputValue] = useState(value);
@@ -29,7 +28,11 @@ export default function ActionableInput({
 
   return (
     <div className="d-flex">
-      <FloatingLabel controlId="floatingInput" label={inputLabel}>
+      <FloatingLabel
+        controlId="floatingInput"
+        label={inputLabel}
+        style={{ flexGrow: 2 }}
+      >
         <Form.Control
           type="text"
           className="rounded-0 rounded-start"
