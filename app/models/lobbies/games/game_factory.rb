@@ -7,7 +7,7 @@ module Lobbies
         player_hands = []
 
         lobby.players.each do |player|
-          player_hands << Lobbies::Games::PlayerHand.new(player)
+          player_hands << Lobbies::Games::PlayerHand.new(player.id)
         end
 
         deck.deal(player_hands)

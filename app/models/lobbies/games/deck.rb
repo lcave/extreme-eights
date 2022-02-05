@@ -7,13 +7,13 @@ module Lobbies
         Card::COLOURS.each do |colour|
           2.times do
             Card::COLOURED_VALUES.each do |value|
-              deck << Card.new(colour, value)
+              deck << Card.new(colour: colour, value: value)
             end
           end
         end
 
         Card::WILD_ACTION_VALUES.each do |value|
-          deck << Card.new("WILD", value)
+          deck << Card.new(colour: "WILD", value: value)
         end
 
         @deck = deck.shuffle
@@ -35,10 +35,6 @@ module Lobbies
 
       def draw_card
         @deck.shift
-      end
-
-      def to_s
-        @deck.map(&:to_s)
       end
     end
   end

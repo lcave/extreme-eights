@@ -9,22 +9,24 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    player = Players::Authenticator.find_player_by_token(data["sent_by"])
+    current_player = Players::Authenticator.find_player_by_token(data["token"])
 
     message = Lobbies::Message.create!(
       lobby: lobby,
-      player: player,
+      player: current_player,
       body: data["body"],
     )
 
     broadcast_to(
       lobby,
       {
-        id: message.id,
-        body: message.body,
-        author: player.name,
-        player_id: player.id,
-        sent_at: message.created_at,
+        message: {
+          id: message.id,
+          body: message.body,
+          author: message.player.name,
+          player_id: message.player.id,
+          sent_at: message.created_at,
+        },
       },
     )
   end

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../Authentication/api";
 import ActionableInput from "../Forms/ActionableInput";
 import AbsoluteCenteredCard from "../Layout/AbsoluteCenteredCard";
@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createChannel } from "../../channels/utils";
 import { currentPlayerToken } from "../Authentication/currentPlayer";
 import Chatroom from "./Chatroom";
+import { Button } from "react-bootstrap";
 
 const H2 = styled.h2`
   text-transform: capitalize;
@@ -25,6 +26,7 @@ const H3 = styled.h3`
 export default function Lobby() {
   const { lobbyId } = useParams();
   const [lobby, setLobby] = useState(null);
+  const navigate = useNavigate();
 
   const inviteLink = () => {
     return window.location.href;
@@ -34,6 +36,26 @@ export default function Lobby() {
     navigator.clipboard.writeText(inviteLink());
   };
 
+  const handleDataReceived = (data) => {
+    switch (data.type) {
+      case "players":
+        updatePlayers(data.players);
+        break;
+      case "message":
+        addMessage(data.message);
+        break;
+      case "game_starting":
+        navigate(`/lobbies/${lobby.id}/game`);
+        break;
+    }
+  };
+
+  const updatePlayers = (players) => {
+    const newLobby = Object.assign({}, lobby);
+    newLobby.players = players;
+    setLobby(newLobby);
+  };
+
   const addMessage = (message) => {
     const newLobby = Object.assign({}, lobby);
     newLobby.messages.push(message);
@@ -41,7 +63,7 @@ export default function Lobby() {
   };
 
   useEffect(() => {
-    if (lobby) {
+    if (lobby && lobby.channel === undefined) {
       const tmpLobby = lobby;
       const channel = createChannel(
         {
@@ -50,13 +72,14 @@ export default function Lobby() {
         },
         {
           received(data) {
-            addMessage(data);
+            handleDataReceived(data);
           },
         }
       );
       tmpLobby.channel = channel;
       setLobby(tmpLobby);
-    } else {
+    }
+    if (lobby === null) {
       axios.get(`/api/v1/lobbies/${lobbyId}`).then((response) => {
         const tmplobby = response.data.lobby;
         setLobby(tmplobby);
@@ -80,7 +103,13 @@ export default function Lobby() {
     lobby.channel.send({
       type: "message",
       body: message,
-      sent_by: currentPlayerToken(),
+      token: currentPlayerToken(),
+    });
+  };
+
+  const createGame = () => {
+    axios.post(`/api/v1/lobbies/${lobby.id}/games`).then(() => {
+      navigate(`/lobbies/${lobby.id}/game`);
     });
   };
 
@@ -112,6 +141,9 @@ export default function Lobby() {
             );
           })}
         </ul>
+        <Button variant="success" className="mb-3" onClick={() => createGame()}>
+          Start Game
+        </Button>
         <Chatroom
           messages={lobby.messages}
           sendMessageCallback={(message) => sendMessage(message)}

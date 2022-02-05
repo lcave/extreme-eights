@@ -12,6 +12,13 @@ module Api
 
       def show
         lobby = Lobbies::Repository.find_or_join(friendly_id: params[:id], player: current_player)
+        MessagesChannel.broadcast_to(
+          lobby,
+          {
+            type: "players",
+            players: lobby.player_names_and_ids,
+          },
+        )
 
         render json: {
           lobby: {

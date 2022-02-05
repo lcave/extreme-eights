@@ -34,7 +34,7 @@ module Lobbies
 
       attr_accessor :colour, :value
 
-      def initialize(colour, value)
+      def initialize(colour:, value:)
         @colour = colour
         @value = value
       end

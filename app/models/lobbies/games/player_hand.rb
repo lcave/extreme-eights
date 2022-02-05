@@ -1,11 +1,22 @@
 module Lobbies
   module Games
     class PlayerHand
-      attr_accessor :hand, :player_id
+      attr_accessor :hand, :player_id, :connected
 
-      def initialize(player)
-        @player_id = player.id
+      def initialize(player_id)
+        @player_id = player_id
         @hand = []
+        @connected = false
+      end
+
+      def self.from_hash(hash)
+        hand = new(
+          hash["player_id"],
+        )
+        hand.hand = hash["hand"].map { |card| Card.new(**card.symbolize_keys) }
+        hand.connected = hash["connected"]
+
+        hand
       end
 
       def add_card(card)
