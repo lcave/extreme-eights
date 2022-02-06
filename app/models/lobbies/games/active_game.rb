@@ -1,7 +1,7 @@
 module Lobbies
   module Games
     class ActiveGame
-      attr_reader :deck, :discard, :player_hands
+      attr_reader :deck, :discard, :player_hands, :game
 
       def initialize(game)
         load_game_state(game)
@@ -15,6 +15,11 @@ module Lobbies
         )
 
         load_game_state(@game.reload)
+
+        GamesChannel.broadcast_to(
+          @game,
+          game_state,
+        )
       end
 
       def draw_card_for(player_id)
@@ -54,6 +59,17 @@ module Lobbies
 
       def method_missing(method, *args)
         @game.public_send(method, *args)
+      end
+
+      def game_state
+        {
+          type: "game_state",
+          game_state: {
+            discard: @discard.top_card,
+            current_player: @player_hands.first.player_id,
+            players: players_hash,
+          },
+        }
       end
 
       private

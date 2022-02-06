@@ -18,7 +18,6 @@ class GamesChannel < ApplicationCable::Channel
   def receive(data)
     current_player = Players::Authenticator.find_player_by_token(params[:token])
     type = data["type"]
-
     game = Lobbies::Games::GameRepository.load(self.game)
     if type == "ready" && !game.started
       game.mark_player_ready(current_player.id)
@@ -26,12 +25,10 @@ class GamesChannel < ApplicationCable::Channel
       if game.all_players_ready?
         6.times do |i|
           broadcast_to(
-            game,
+            self.game,
             {
-              type: "game_state",
               starting_in: 5 - i,
-              game_state: game_state(game),
-            },
+            }.merge(game.game_state),
           )
           sleep(1)
         end
@@ -48,25 +45,12 @@ class GamesChannel < ApplicationCable::Channel
     else
       broadcast_to(
         self.game,
-        {
-          type: "game_state",
-          game_state: game_state(game),
-        },
+        game.game_state,
       )
     end
   end
 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
-  end
-
-  private
-
-  def game_state(game)
-    {
-      discard: game.discard.top_card,
-      current_player: game.player_hands.first.player_id,
-      players: game.players_hash,
-    }
   end
 end
