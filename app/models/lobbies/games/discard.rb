@@ -1,20 +1,17 @@
 module Lobbies
   module Games
     class Discard
-      def initialize
-        @discard = []
+      def initialize(cards: [])
+        @discard = cards
       end
 
       def self.from_hash(hash)
-        discard = new
-        hash["discard"].each do |card|
-          discard.add_card(Card.new(**card.symbolize_keys))
-        end
-
-        discard
+        new(cards: hash["discard"].map { |card| Card.new(**card.symbolize_keys) })
       end
 
       def add_card(card)
+        Rules.valid_discard?(top_card, card)
+
         @discard << card
       end
 

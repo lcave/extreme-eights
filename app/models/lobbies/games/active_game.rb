@@ -41,6 +41,12 @@ module Lobbies
         save_game_state!
       end
 
+      def play_card_for(player_id, card_id)
+        card_to_play = hand_for(player_id).play_card(card_id)
+        @discard.add_card(card_to_play)
+        save_game_state!
+      end
+
       def hand_for(player_id)
         @player_hands.find { |hand| hand.player_id == player_id }
       end

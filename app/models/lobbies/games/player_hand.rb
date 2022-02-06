@@ -23,6 +23,11 @@ module Lobbies
         card.id = SecureRandom.uuid
         @hand << card
       end
+
+      def play_card(card_id)
+        card = @hand.find { |c| c.id == card_id }
+        @hand.delete(card)
+      end
     end
   end
 end

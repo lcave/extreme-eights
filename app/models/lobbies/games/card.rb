@@ -1,6 +1,8 @@
 module Lobbies
   module Games
     class Card
+      WILD_COLOUR = "WILD".freeze
+
       COLOURS = %w[
         RED
         BLUE

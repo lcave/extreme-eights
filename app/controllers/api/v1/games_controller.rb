@@ -27,7 +27,7 @@ module Api
       def play_card
         Lobbies::Games::GameRepository.load(
           current_player.lobby.game,
-        ).play_card_for(current_player.id)
+        ).play_card_for(current_player.id, params[:card_id])
       end
 
       def show
