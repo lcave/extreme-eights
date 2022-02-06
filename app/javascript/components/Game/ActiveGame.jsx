@@ -1,79 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { createChannel } from "../../channels/utils";
-import { getCurrentPlayer } from "../Authentication/currentPlayer";
+import axios from "axios";
+import React from "react";
+import { useParams } from "react-router-dom";
 import Card from "./Card";
 import Hand from "./Hand";
 import PlayerRotation from "./PlayerRotation";
 
 export default function ActiveGame({ gameState }) {
-  const [hand, setHand] = useState(null);
-
-  const currentPlayer = getCurrentPlayer();
-  const isMyTurn = () => {
-    return gameState.current_player === currentPlayer.id;
-  };
-
-  const handleSetCards = (cards, channel) => {
-    setHand({
-      channel: channel,
-      cards: cards,
-    });
-  };
-
-  const handleReceievedMessage = (data, channel) => {
-    switch (data.type) {
-      case "get_hand":
-        handleSetCards(data.cards, channel);
-        break;
-    }
-  };
+  const { lobbyId } = useParams();
 
   const drawCard = () => {
-    hand.channel.send({
-      type: "draw_card",
-    });
+    axios.get(`/api/v1/lobbies/${lobbyId}/game/draw`);
   };
 
   const playCard = (cardId) => {
-    hand.channel.send({
-      type: "play_card",
+    axios.post(`/api/v1/lobbies/${lobbyId}/game/play`, {
       card_id: cardId,
     });
   };
 
-  useEffect(() => {
-    const channel = createChannel(
-      {
-        channel: "PlayersChannel",
-      },
-      {
-        connected() {
-          channel.send({
-            type: "get_hand",
-          });
-        },
-        received(data) {
-          handleReceievedMessage(data, channel);
-        },
-      }
-    );
-    setHand({ channel: channel });
-  }, []);
-
-  const playerTurn = () => {
-    return (
-      <span>
-        {gameState.players.find((p) => p.id === gameState.current_player).name}
-        's Turn
-      </span>
-    );
-  };
-
   const myHand = () => {
-    if (hand?.cards) {
+    if (gameState?.myHand) {
       return (
         <Hand
-          cards={hand.cards}
+          cards={gameState.myHand}
           onClickCallback={(cardId) => playCard(cardId)}
         />
       );

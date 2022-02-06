@@ -7,6 +7,18 @@ module Lobbies
         load_game_state(game)
       end
 
+      def start!
+        @game.started = true
+
+        @game.update(
+          deck: @deck,
+          discard: @discard,
+          player_hands: @player_hands,
+        )
+
+        load_game_state(@game.reload)
+      end
+
       def save_game_state!
         @game.update(
           deck: @deck,
@@ -15,6 +27,8 @@ module Lobbies
         )
 
         load_game_state(@game.reload)
+
+        return unless @game.started
 
         GamesChannel.broadcast_to(
           @game,
@@ -53,8 +67,13 @@ module Lobbies
             id: p.id,
             leader: @game.lobby.lobby_leader_id == p.id,
             card_count: hand_for(p.id).hand.size,
+            hand: encrypt_hand(p, hand_for(p.id)),
           }
         end
+      end
+
+      def encrypt_hand(_player, hand)
+        Base64.strict_encode64(hand.hand.to_json)
       end
 
       def method_missing(method, *args)

@@ -108,7 +108,7 @@ export default function Lobby() {
   };
 
   const createGame = () => {
-    axios.post(`/api/v1/lobbies/${lobby.id}/games`).then(() => {
+    axios.post(`/api/v1/lobbies/${lobby.id}/game`).then(() => {
       navigate(`/lobbies/${lobby.id}/game`);
     });
   };

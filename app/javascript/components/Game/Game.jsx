@@ -2,7 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createChannel } from "../../channels/utils";
-import { currentPlayerToken } from "../Authentication/currentPlayer";
+import {
+  currentPlayerToken,
+  getCurrentPlayer,
+} from "../Authentication/currentPlayer";
 import AbsoluteCenteredCard from "../Layout/AbsoluteCenteredCard";
 import ActiveGame from "./ActiveGame";
 
@@ -17,9 +20,15 @@ export default function Game() {
   };
 
   const setGameState = (data) => {
+    const hand = atob(
+      data.game_state.players.find((p) => p.id === getCurrentPlayer().id).hand
+    );
+    const parsedHand = JSON.parse(hand);
+
     const tmpGame = Object.assign({}, game);
     tmpGame.startingIn = data.starting_in;
     tmpGame.gameState = data.game_state;
+    tmpGame.gameState.myHand = parsedHand;
     setGame(tmpGame);
   };
 

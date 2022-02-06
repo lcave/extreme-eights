@@ -18,6 +18,18 @@ module Api
         }, status: :created
       end
 
+      def draw_card
+        Lobbies::Games::GameRepository.load(
+          current_player.lobby.game,
+        ).draw_card_for(current_player.id)
+      end
+
+      def play_card
+        Lobbies::Games::GameRepository.load(
+          current_player.lobby.game,
+        ).play_card_for(current_player.id)
+      end
+
       def show
         game = lobby.game
         render json: {

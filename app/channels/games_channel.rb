@@ -19,33 +19,35 @@ class GamesChannel < ApplicationCable::Channel
     current_player = Players::Authenticator.find_player_by_token(params[:token])
     type = data["type"]
     game = Lobbies::Games::GameRepository.load(self.game)
-    if type == "ready" && !game.started
-      game.mark_player_ready(current_player.id)
 
-      if game.all_players_ready?
-        6.times do |i|
-          broadcast_to(
-            self.game,
-            {
-              starting_in: 5 - i,
-            }.merge(game.game_state),
-          )
-          sleep(1)
-        end
-        game.update!(started: true)
-      else
-        broadcast_to(
-          self.game,
-          {
-            type: "waiting_for",
-            waiting_for: game.disconnected_players,
-          },
-        )
-      end
-    else
+    if game.started
       broadcast_to(
         self.game,
         game.game_state,
+      )
+      return
+    elsif type == "ready"
+      game.mark_player_ready(current_player.id)
+    end
+
+    if game.all_players_ready?
+      6.times do |i|
+        broadcast_to(
+          self.game,
+          {
+            starting_in: 5 - i,
+          }.merge(game.game_state),
+        )
+        sleep(1)
+      end
+      game.start!
+    else
+      broadcast_to(
+        self.game,
+        {
+          type: "waiting_for",
+          waiting_for: game.disconnected_players,
+        },
       )
     end
   end
