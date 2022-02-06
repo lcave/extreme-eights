@@ -20,7 +20,7 @@ module Lobbies
       end
 
       def add_card(card)
-        card.id = @hand.size
+        card.id = SecureRandom.uuid
         @hand << card
       end
     end

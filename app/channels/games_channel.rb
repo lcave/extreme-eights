@@ -5,9 +5,10 @@ class GamesChannel < ApplicationCable::Channel
     current_player = Players::Authenticator.find_player_by_token(params[:token])
 
     self.game = Lobbies::Games::Game.find(params[:game_id])
+
     return reject unless game
 
-    hand = game.hand_for(current_player.id)
+    hand = Lobbies::Games::GameRepository.load(game).hand_for(current_player.id)
 
     return reject unless hand
 
@@ -18,8 +19,10 @@ class GamesChannel < ApplicationCable::Channel
     current_player = Players::Authenticator.find_player_by_token(params[:token])
     type = data["type"]
 
+    game = Lobbies::Games::GameRepository.load(self.game)
     if type == "ready" && !game.started
-      game.set_player_ready(current_player.id)
+      game.mark_player_ready(current_player.id)
+
       if game.all_players_ready?
         6.times do |i|
           broadcast_to(
@@ -32,11 +35,10 @@ class GamesChannel < ApplicationCable::Channel
           )
           sleep(1)
         end
-
         game.update!(started: true)
       else
         broadcast_to(
-          game,
+          self.game,
           {
             type: "waiting_for",
             waiting_for: game.disconnected_players,
@@ -45,7 +47,7 @@ class GamesChannel < ApplicationCable::Channel
       end
     else
       broadcast_to(
-        game,
+        self.game,
         {
           type: "game_state",
           game_state: game_state(game),
@@ -62,9 +64,9 @@ class GamesChannel < ApplicationCable::Channel
 
   def game_state(game)
     {
-      discard: game.discard_pile.top_card,
-      current_player: game.player_hand_objects.first.player_id,
-      players: game.lobby.player_names_and_ids,
+      discard: game.discard.top_card,
+      current_player: game.player_hands.first.player_id,
+      players: game.players_hash,
     }
   end
 end

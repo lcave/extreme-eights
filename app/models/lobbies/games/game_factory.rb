@@ -2,7 +2,7 @@ module Lobbies
   module Games
     module GameFactory
       def self.create!(lobby)
-        lobby.game.destroy!
+        lobby.game&.destroy!
 
         deck = Deck.new
 

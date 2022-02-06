@@ -4,25 +4,25 @@ class PlayersChannel < ApplicationCable::Channel
   def subscribed
     self.player = Players::Authenticator.find_player_by_token(params[:token])
 
-    game = player.lobby.game
-    return reject unless game
+    game = Lobbies::Games::GameRepository.load(player.lobby.game)
 
-    hand = game.hand_for(player.id)
-    return reject unless hand
+    return reject unless game
 
     stream_for player
   end
 
   def receive(data)
-    if data["type"] == "get_hand"
-      broadcast_to(
-        player,
-        {
-          type: "get_hand",
-          cards: player.hand,
-        },
-      )
-    end
+    game = Lobbies::Games::GameRepository.load(player.lobby.game)
+
+    game.draw_card_for(player.id) if data["type"] == "draw_card"
+
+    broadcast_to(
+      player,
+      {
+        type: "get_hand",
+        cards: game.hand_for(player.id).hand,
+      },
+    )
   end
 
   def unsubscribed

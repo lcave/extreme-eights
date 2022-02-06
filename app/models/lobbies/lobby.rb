@@ -8,7 +8,7 @@ module Lobbies
     validates :lobby_leader_id, presence: true
 
     def player_names_and_ids
-      players.map { |p| { name: p.name, id: p.id, leader: lobby_leader_id == p.id, card_count: p.hand.size } }
+      players.map { |p| { name: p.name, id: p.id, leader: lobby_leader_id == p.id } }
     end
 
     def json_messages

@@ -62,9 +62,11 @@ const Value = styled.span`
 export default function Card({
   colour,
   value,
+  id,
   disabled = false,
   stacked = false,
   facedown = false,
+  onClickCallback = () => {},
 }) {
   const colourFor = (colour) => {
     switch (colour) {
@@ -82,13 +84,20 @@ export default function Card({
   };
 
   if (facedown) {
-    return <FacedownCard stacked={stacked} disabled={disabled} />;
+    return (
+      <FacedownCard
+        stacked={stacked}
+        disabled={disabled}
+        onClick={() => onClickCallback()}
+      />
+    );
   } else {
     return (
       <PlayingCard
         colour={colourFor(colour)}
         stacked={stacked}
         disabled={disabled}
+        onClick={() => onClickCallback(id)}
       >
         <Value>{value}</Value>
       </PlayingCard>

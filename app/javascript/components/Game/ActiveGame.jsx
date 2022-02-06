@@ -13,18 +13,32 @@ export default function ActiveGame({ gameState }) {
     return gameState.current_player === currentPlayer.id;
   };
 
-  const handleSetCards = (cards) => {
-    const tmpHand = Object.assign({}, hand);
-    tmpHand.cards = cards;
-    setHand(tmpHand);
+  const handleSetCards = (cards, channel) => {
+    setHand({
+      channel: channel,
+      cards: cards,
+    });
   };
 
-  const handleReceievedMessage = (data) => {
+  const handleReceievedMessage = (data, channel) => {
     switch (data.type) {
       case "get_hand":
-        handleSetCards(data.cards);
+        handleSetCards(data.cards, channel);
         break;
     }
+  };
+
+  const drawCard = () => {
+    hand.channel.send({
+      type: "draw_card",
+    });
+  };
+
+  const playCard = (cardId) => {
+    hand.channel.send({
+      type: "play_card",
+      card_id: cardId,
+    });
   };
 
   useEffect(() => {
@@ -39,7 +53,7 @@ export default function ActiveGame({ gameState }) {
           });
         },
         received(data) {
-          handleReceievedMessage(data);
+          handleReceievedMessage(data, channel);
         },
       }
     );
@@ -57,7 +71,12 @@ export default function ActiveGame({ gameState }) {
 
   const myHand = () => {
     if (hand?.cards) {
-      return <Hand cards={hand.cards} />;
+      return (
+        <Hand
+          cards={hand.cards}
+          onClickCallback={(cardId) => playCard(cardId)}
+        />
+      );
     }
   };
 
@@ -67,7 +86,7 @@ export default function ActiveGame({ gameState }) {
         <div className="d-flex w-100 justify-content-around">
           <div className="d-flex justify-content-center flex-column align-items-center">
             <h3>Draw</h3>
-            <Card disabled facedown />
+            <Card facedown onClickCallback={() => drawCard()} />
           </div>
           <div className="d-flex justify-content-center flex-column align-items-center">
             <h3>Discard</h3>
