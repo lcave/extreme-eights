@@ -1,28 +1,28 @@
 module Lobbies
   module Games
     class Deck
-      def initialize(new: true)
+      def initialize(is_new_deck: true)
         @deck = []
 
-        if new
-          Card::COLOURS.each do |colour|
-            2.times do
-              Card::COLOURED_VALUES.each do |value|
-                @deck << Card.new(colour: colour, value: value)
-              end
+        return unless is_new_deck
+
+        Card::COLOURS.each do |colour|
+          2.times do
+            Card::COLOURED_VALUES.each do |value|
+              @deck << Card.new(colour: colour, value: value)
             end
           end
-
-          Card::WILD_ACTION_VALUES.each do |value|
-            @deck << Card.new(colour: "WILD", value: value)
-          end
-
-          @deck.shuffle
         end
+
+        Card::WILD_ACTION_VALUES.each do |value|
+          @deck << Card.new(colour: "WILD", value: value)
+        end
+
+        @deck = @deck.shuffle
       end
 
       def self.from_array(arr)
-        Deck.new(new: false).load_deck(arr)
+        Deck.new(is_new_deck: false).load_deck(arr)
       end
 
       def load_deck(arr)
