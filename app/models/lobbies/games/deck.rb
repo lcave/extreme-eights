@@ -42,9 +42,9 @@ module Lobbies
       end
 
       def start_discard
-        discard = Discard.new
-        discard.add_card(draw_card) until Card::NUM_VALUES.include?(discard.top_card&.value)
-        discard
+        cards = []
+        cards << draw_card until Card::NUM_VALUES.include?(cards.last&.value)
+        Discard.new(cards: cards)
       end
 
       def draw_card
