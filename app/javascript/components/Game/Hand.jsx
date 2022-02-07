@@ -9,19 +9,28 @@ const PlayerHand = styled.div`
   align-self: end;
 `;
 
-export default function Hand({ cards, onClickCallback }) {
+export default function Hand({ cards, onClickCallback, isMyTurn }) {
+  const myTurnMessage = () => {
+    if (isMyTurn) {
+      return <h3 className="text-center">Your Turn!</h3>;
+    }
+  };
+
   return (
-    <PlayerHand>
-      {cards.map((card) => (
-        <Card
-          onClickCallback={(cardId) => onClickCallback(cardId)}
-          colour={card.colour}
-          value={card.value}
-          key={card.id}
-          id={card.id}
-          stacked={true}
-        />
-      ))}
-    </PlayerHand>
+    <div>
+      {myTurnMessage()}
+      <PlayerHand>
+        {cards.map((card) => (
+          <Card
+            onClickCallback={(cardId) => onClickCallback(cardId)}
+            colour={card.colour}
+            value={card.value}
+            key={card.id}
+            id={card.id}
+            stacked={true}
+          />
+        ))}
+      </PlayerHand>
+    </div>
   );
 }

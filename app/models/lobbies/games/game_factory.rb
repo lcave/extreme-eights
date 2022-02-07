@@ -11,6 +11,7 @@ module Lobbies
         lobby.players.each do |player|
           player_hands << Lobbies::Games::PlayerHand.new(player.id)
         end
+        player_hands.shuffle!
 
         deck.deal(player_hands)
 
@@ -21,6 +22,7 @@ module Lobbies
           deck: deck,
           discard: discard,
           player_hands: player_hands,
+          current_player_id: player_hands.first.player_id,
         )
       end
     end

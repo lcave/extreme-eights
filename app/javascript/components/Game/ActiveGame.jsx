@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
+import { getCurrentPlayer } from "../Authentication/currentPlayer";
 import Card from "./Card";
 import Hand from "./Hand";
 import PlayerRotation from "./PlayerRotation";
@@ -18,10 +19,15 @@ export default function ActiveGame({ gameState }) {
     });
   };
 
+  const isMyTurn = () => {
+    return getCurrentPlayer().id === gameState.current_player;
+  };
+
   const myHand = () => {
     if (gameState?.myHand) {
       return (
         <Hand
+          isMyTurn={isMyTurn()}
           cards={gameState.myHand}
           onClickCallback={(cardId) => playCard(cardId)}
         />
@@ -46,7 +52,10 @@ export default function ActiveGame({ gameState }) {
             />
           </div>
         </div>
-        <PlayerRotation players={gameState.players} />
+        <PlayerRotation
+          players={gameState.players}
+          currentPlayer={gameState.current_player}
+        />
       </div>
       {myHand()}
     </div>

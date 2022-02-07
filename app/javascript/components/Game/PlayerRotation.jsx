@@ -1,39 +1,45 @@
 import React from "react";
 import styled from "styled-components";
-import Card from "./Card";
-import { SmallFaceDownCard } from "./SmallFaceDownCard";
+import PlayerCardCount from "./PlayerCardCount";
 
 const Rotation = styled.div`
   list-style: none;
   display: flex;
   justify-content: center;
   & > div {
-    margin: 0 2rem;
+    margin: 0 1rem;
   }
 `;
 
-const PlayerCards = styled.div`
-  width: 80px;
+const PlayerInfo = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  max-width: 18%;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 15px;
+  border: ${(props) =>
+    props.currentPlayer ? `${props.theme.colors.lightBlue} 3px solid` : "none"};
 `;
 
-export default function PlayerRotation({ players }) {
+export default function PlayerRotation({ players, currentPlayer }) {
+  const playerBorder = (player) => {
+    if (player.id === currentPlayer) {
+      return "border border-primary";
+    }
+  };
+
   return (
     <Rotation>
       {players.map((player) => {
         return (
-          <div
+          <PlayerInfo
             key={player.id}
-            className="d-flex flex-column align-items-center"
+            currentPlayer={currentPlayer === player.id}
           >
             {player.name}
-            <PlayerCards>
-              {[...Array(player.card_count).keys()].map((i) => (
-                <SmallFaceDownCard key={i} stacked />
-              ))}
-            </PlayerCards>
-          </div>
+            <PlayerCardCount cardCount={player.card_count} />
+          </PlayerInfo>
         );
       })}
     </Rotation>

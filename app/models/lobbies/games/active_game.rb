@@ -5,6 +5,7 @@ module Lobbies
 
       def initialize(game)
         load_game_state(game)
+        @rules = Rules.new(self)
       end
 
       def start!
@@ -24,6 +25,7 @@ module Lobbies
           deck: @deck,
           discard: @discard,
           player_hands: @player_hands,
+          current_player_id: @current_player_id,
         )
 
         load_game_state(@game.reload)
@@ -43,7 +45,13 @@ module Lobbies
 
       def play_card_for(player_id, card_id)
         card_to_play = hand_for(player_id).play_card(card_id)
+
+        @rules.validate_move!(player_id, @discard.top_card, card_to_play)
+
         @discard.add_card(card_to_play)
+
+        next_player!
+
         save_game_state!
       end
 
@@ -91,13 +99,23 @@ module Lobbies
           type: "game_state",
           game_state: {
             discard: @discard.top_card,
-            current_player: @player_hands.first.player_id,
+            current_player: @current_player_id,
             players: players_hash,
           },
         }
       end
 
+      def skip_to(player_id)
+        @current_player_id = player_id
+      end
+
       private
+
+      def next_player!
+        current_player_index = @player_hands.find_index { |hand| hand.player_id == @current_player_id }
+        new_index = current_player_index + 1 == @player_hands.size ? 0 : current_player_index + 1
+        @current_player_id = @player_hands[new_index].player_id
+      end
 
       def load_game_state(game)
         @game = game
@@ -106,6 +124,7 @@ module Lobbies
         @player_hands = @game.player_hands.map do |hand|
           Lobbies::Games::PlayerHand.from_hash(hand)
         end
+        @current_player_id = game.current_player_id
       end
     end
   end

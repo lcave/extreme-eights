@@ -10,8 +10,6 @@ module Lobbies
       end
 
       def add_card(card)
-        Rules.valid_discard?(top_card, card)
-
         @discard << card
       end
 
