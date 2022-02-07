@@ -6,7 +6,10 @@ import AbsoluteCenteredCard from "../Layout/AbsoluteCenteredCard";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createChannel } from "../../channels/utils";
-import { currentPlayerToken } from "../Authentication/currentPlayer";
+import {
+  currentPlayerToken,
+  getCurrentPlayer,
+} from "../Authentication/currentPlayer";
 import Chatroom from "./Chatroom";
 import { Button } from "react-bootstrap";
 
@@ -113,6 +116,16 @@ export default function Lobby() {
     });
   };
 
+  const startButton = () => {
+    if (getCurrentPlayer().id === lobby.lobby_leader_id) {
+      return (
+        <Button variant="success" className="mb-3" onClick={() => createGame()}>
+          Start Game
+        </Button>
+      );
+    }
+  };
+
   if (lobby) {
     return (
       <AbsoluteCenteredCard>
@@ -141,9 +154,7 @@ export default function Lobby() {
             );
           })}
         </ul>
-        <Button variant="success" className="mb-3" onClick={() => createGame()}>
-          Start Game
-        </Button>
+        {startButton()}
         <Chatroom
           messages={lobby.messages}
           sendMessageCallback={(message) => sendMessage(message)}

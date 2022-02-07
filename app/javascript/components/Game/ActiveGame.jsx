@@ -52,11 +52,11 @@ export default function ActiveGame({ gameState }) {
             />
           </div>
         </div>
-        <PlayerRotation
-          players={gameState.players}
-          currentPlayer={gameState.current_player}
-        />
       </div>
+      <PlayerRotation
+        players={gameState.players}
+        currentPlayer={gameState.current_player}
+      />
       {myHand()}
     </div>
   );
