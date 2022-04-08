@@ -7,6 +7,8 @@ export default function ActionableInput({
   value = "",
   disabled = false,
   onClickCallback,
+  buttonClassNames = "",
+  inputClassNames = "",
 }) {
   const [inputValue, setInputValue] = useState(value);
 
@@ -35,7 +37,7 @@ export default function ActionableInput({
       >
         <Form.Control
           type="text"
-          className="rounded-0 rounded-start"
+          className={`rounded-0 rounded-start ${inputClassNames}`}
           disabled={disabled}
           value={inputValue}
           onChange={handleInputChange}
@@ -46,7 +48,7 @@ export default function ActionableInput({
       <Button
         variant="success"
         style={{ zIndex: 1000 }}
-        className="rounded-0 rounded-end"
+        className={`rounded-0 rounded-end ${buttonClassNames}`}
         onClick={handleClick}
       >
         {buttonLabel}

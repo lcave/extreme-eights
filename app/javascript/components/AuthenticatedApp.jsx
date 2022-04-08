@@ -7,7 +7,7 @@ import Lobby from "./Lobby/Lobby";
 export default function AuthenticatedApp() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="*" element={<Home />} />
       <Route path="/lobbies/:lobbyId" element={<Lobby />} />
       <Route path="/lobbies/:lobbyId/game" element={<Game />} />
     </Routes>

@@ -5,6 +5,7 @@ import { getCurrentPlayer } from "../Authentication/currentPlayer";
 import Card from "./Card";
 import Hand from "./Hand";
 import PlayerRotation from "./PlayerRotation";
+import ReactableAction from "./ReactableAction";
 
 export default function ActiveGame({ gameState }) {
   const { lobbyId } = useParams();
@@ -23,6 +24,12 @@ export default function ActiveGame({ gameState }) {
     return getCurrentPlayer().id === gameState.current_player;
   };
 
+  const reactableAction = () => {
+    if (gameState.reactable_action) {
+      return <ReactableAction action={gameState.reactable_action} />;
+    }
+  };
+
   const myHand = () => {
     if (gameState?.myHand) {
       return (
@@ -36,7 +43,7 @@ export default function ActiveGame({ gameState }) {
   };
 
   return (
-    <div className="d-flex flex-column justify-content-between h-100">
+    <div className="d-flex flex-column justify-content-between h-100 flex-grow-1">
       <div>
         <div className="d-flex w-100 justify-content-around">
           <div className="d-flex justify-content-center flex-column align-items-center">
@@ -57,6 +64,7 @@ export default function ActiveGame({ gameState }) {
         players={gameState.players}
         currentPlayer={gameState.current_player}
       />
+      {reactableAction()}
       {myHand()}
     </div>
   );

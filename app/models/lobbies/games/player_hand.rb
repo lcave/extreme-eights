@@ -16,23 +16,17 @@ module Lobbies
         hand.hand = hash["hand"].map { |card| Card.new(**card.symbolize_keys) }
         hand.connected = hash["connected"]
 
-        hand.sort_hand
         hand
       end
 
       def add_card(card)
         card.id = SecureRandom.uuid
-        @hand << card
-        sort_hand
+        @hand.prepend(card)
       end
 
       def play_card(card_id)
         card = @hand.find { |c| c.id == card_id }
         @hand.delete(card)
-      end
-
-      def sort_hand
-        @hand.sort! { |a, b| a.colour <=> b.colour }
       end
     end
   end

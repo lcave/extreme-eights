@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import eight from "../eight.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const PlayingCard = styled.button`
+export const PlayingCard = styled.button`
   width: 100px;
   overflow: hidden;
   aspect-ratio: 1/1.5;
@@ -55,7 +56,7 @@ const Value = styled.span`
   width: 100%;
   text-align: center;
   color: black;
-  font-size: 400%;
+  font-size: 350%;
   font-weight: 700;
 `;
 
@@ -83,6 +84,34 @@ export default function Card({
     }
   };
 
+  const symbolFor = (value) => {
+    switch (value) {
+      case "WILD":
+        return "WILD";
+      case "PICKUP_MINOR":
+        return (
+          <>
+            <FontAwesomeIcon icon="plus" size="xs" /> 2
+          </>
+        );
+      case "PICKUP_MAJOR":
+        return (
+          <>
+            <FontAwesomeIcon icon="plus" size="xs" /> 4
+          </>
+        );
+      case "SKIP":
+        return <FontAwesomeIcon icon="forward" />;
+      case "ROTATE":
+        return <FontAwesomeIcon icon="random" />;
+      case "SWAP":
+        return <FontAwesomeIcon icon="exchange-alt" />;
+      case "REVERSE":
+        return <FontAwesomeIcon icon="sync-alt" />;
+    }
+    return value;
+  };
+
   if (facedown) {
     return (
       <FacedownCard
@@ -99,7 +128,7 @@ export default function Card({
         disabled={disabled}
         onClick={() => onClickCallback(id)}
       >
-        <Value>{value}</Value>
+        <Value>{symbolFor(value)}</Value>
       </PlayingCard>
     );
   }

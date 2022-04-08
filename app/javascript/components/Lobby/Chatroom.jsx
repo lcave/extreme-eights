@@ -71,6 +71,7 @@ export default function Chatroom({ messages, sendMessageCallback }) {
       <ActionableInput
         inputLabel="Message"
         buttonLabel="Send"
+        inputClassNames="border-bottom-0 border-start-0 rounded-0"
         onClickCallback={(message) => sendMessageCallback(message)}
       />
     </Chat>

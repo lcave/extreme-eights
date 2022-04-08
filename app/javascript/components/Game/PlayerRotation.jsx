@@ -16,9 +16,8 @@ const PlayerInfo = styled.div`
   max-width: 18%;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
-  border-radius: 15px;
-  border: ${(props) =>
+  padding: 0.25rem 1rem;
+  border-bottom: ${(props) =>
     props.currentPlayer ? `${props.theme.colors.lightBlue} 3px solid` : "none"};
 `;
 

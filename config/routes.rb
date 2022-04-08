@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :lobbies, only: %i[create show index] do
         resource :game, only: %i[create] do
           post :play, to: "games#play_card"
+          post :reactable_action, to: "games#reactable_action"
           get :draw, to: "games#draw_card"
         end
         get :game, to: "games#show"

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { RoundedCard } from "./Styles";
 
-const AbsoluteCenter = styled.div`
+export const AbsoluteCenter = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
@@ -12,7 +12,7 @@ const AbsoluteCenter = styled.div`
 `;
 
 const MinSizeCard = styled(RoundedCard)`
-  height: 90%;
+  min-height: 90%;
   width: 1100px;
   display: flex;
   flex-direction: column;

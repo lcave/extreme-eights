@@ -30,6 +30,12 @@ module Api
         ).play_card_for(current_player.id, params[:card_id])
       end
 
+      def reactable_action
+        Lobbies::Games::GameRepository.load(
+          current_player.lobby.game,
+        ).resolve_reactable_action(current_player.id, reactable_action_params)
+      end
+
       def show
         game = lobby.game
         render json: {
@@ -38,6 +44,10 @@ module Api
       end
 
       private
+
+      def reactable_action_params
+        params.require(:game).permit(:colour, :action)
+      end
 
       def lobby
         Lobbies::Lobby.find_by(friendly_id: params[:lobby_id])
