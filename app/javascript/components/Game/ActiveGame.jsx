@@ -43,7 +43,10 @@ export default function ActiveGame({ gameState }) {
   };
 
   return (
-    <div className="d-flex flex-column justify-content-between h-100 flex-grow-1">
+    <div
+      id="active-game"
+      className="d-flex flex-column justify-content-between h-100 flex-grow-1"
+    >
       <div>
         <div className="d-flex w-100 justify-content-around">
           <div className="d-flex justify-content-center flex-column align-items-center">

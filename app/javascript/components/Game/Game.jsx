@@ -77,12 +77,26 @@ export default function Game() {
   const content = () => {
     if (game) {
       if (game.waitingFor) {
-        return game.waitingFor.map((name) => {
-          return <span key={name}>{name}</span>;
-        });
+        return (
+          <div className="w-100 flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+            <ul>
+              {game.waitingFor.map((name) => {
+                return (
+                  <li key={name}>
+                    <h3>{name}</h3>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
       }
       if (game.startingIn && game.startingIn !== 0) {
-        return <span>{game.startingIn}</span>;
+        return (
+          <div className="w-100 flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+            <h1>{game.startingIn}</h1>
+          </div>
+        );
       }
       if (game.gameState) {
         return <ActiveGame gameState={game.gameState} />;

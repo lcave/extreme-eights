@@ -36,6 +36,8 @@ export default function ReactableAction({ action }) {
         return "swap_hand";
       case "choose_colour":
         return <ChooseColour chooseColourCallback={chooseColourCallback} />;
+      case "stack_plus_choose_colour":
+        return <ChooseColour chooseColourCallback={chooseColourCallback} />;
     }
   };
 

@@ -10,7 +10,10 @@ module Lobbies
 
         if current_card.colour == new_card.colour && current_card.value == new_card.value
           @game.skip_to(player_id)
-          @game.reactable_action = nil
+          if @game.reactable_action&.action_type == ReactableAction::STACK_PLUS
+          else
+            @game.reactable_action = nil
+          end
           return true
         end
 
@@ -59,19 +62,36 @@ module Lobbies
             return
           when "SKIP"
             @game.next_player!
-          when "PICKUP_MINOR", "PICKUP_MAJOR"
+          when "PICKUP_MINOR"
             if @game.reactable_action
               @game.reactable_action.player_id = next_player_in_roation_id
               @game.reactable_action.details = {
-                "total" => @game.reactable_action.details["total"] + (card_to_play.value == "PICKUP_MAJOR" ? 4 : 2),
+                "total" => @game.reactable_action.details["total"] + 2,
               }
             else
               @game.reactable_action = ReactableAction.new(
                 next_player_in_roation_id,
                 ReactableAction::STACK_PLUS,
-                { total: card_to_play.value == "PICKUP_MAJOR" ? 4 : 2 },
+                { total: 2 },
               )
             end
+          when "PICKUP_MAJOR"
+            @game.reactable_action = if @game.reactable_action
+                                       ReactableAction.new(
+                                         player_id,
+                                         ReactableAction::STACK_PLUS_CHOOSE_COLOUR,
+                                         {
+                                           total: @game.reactable_action.details["total"] + 4,
+                                         },
+                                       )
+                                     else
+                                       ReactableAction.new(
+                                         player_id,
+                                         ReactableAction::STACK_PLUS_CHOOSE_COLOUR,
+                                         { total: 4 },
+                                       )
+                                     end
+            return
           when "WILD"
             @game.reactable_action = ReactableAction.new(
               player_id,
